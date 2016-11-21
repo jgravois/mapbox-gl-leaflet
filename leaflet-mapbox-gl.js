@@ -115,8 +115,8 @@ L.MapboxGL = L.Layer.extend({
         this._glMap.transform.latRange = null;
 
         // treat child <canvas> element like L.ImageOverlay
-        L.DomUtil.addClass(this._glMap._canvas, 'leaflet-image-layer');
-        L.DomUtil.addClass(this._glMap._canvas, 'leaflet-zoom-animated');
+        L.DomUtil.addClass(this._glMap._canvas.canvas, 'leaflet-image-layer');
+        L.DomUtil.addClass(this._glMap._canvas.canvas, 'leaflet-zoom-animated');
     },
 
     _update: function (e) {
@@ -146,9 +146,9 @@ L.MapboxGL = L.Layer.extend({
         if (gl.transform.width !== size.x || gl.transform.height !== size.y) {
             container.style.width  = size.x + 'px';
             container.style.height = size.y + 'px';
-            gl.resize();
+            gl._resize();
         } else {
-          gl._update();
+          gl.update();
         }
     },
 
@@ -165,7 +165,7 @@ L.MapboxGL = L.Layer.extend({
       var scale = this._map.getZoomScale(e.zoom),
           offset = this._map._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(), e.zoom, e.center);
 
-      L.DomUtil.setTransform(this._glMap._canvas, offset.subtract(this._offset), scale);
+      L.DomUtil.setTransform(this._glMap._canvas.canvas, offset.subtract(this._offset), scale);
     },
 
     _zoomStart: function (e) {
@@ -176,7 +176,7 @@ L.MapboxGL = L.Layer.extend({
       var scale = this._map.getZoomScale(this._map.getZoom()),
           offset = this._map._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(), this._map.getZoom(), this._map.getCenter());
 
-      L.DomUtil.setTransform(this._glMap._canvas, offset.subtract(this._offset), scale);
+      L.DomUtil.setTransform(this._glMap._canvas.canvas, offset.subtract(this._offset), scale);
     },
 
     _transitionEnd: function (e) {
@@ -186,7 +186,7 @@ L.MapboxGL = L.Layer.extend({
           offset = this._map.latLngToContainerPoint(this._map.getBounds().getNorthWest());
 
           // reset the scale and offset
-          L.DomUtil.setTransform(this._glMap._canvas, offset, 1);
+          L.DomUtil.setTransform(this._glMap._canvas.canvas, offset, 1);
 
           // enable panning once the gl map is ready again
           this._glMap.once('moveend', L.Util.bind(function () {
