@@ -152,7 +152,11 @@ L.MapboxGL = L.Layer.extend({
                 gl.resize();
             }
         } else {
-          gl.update();
+          if (gl._update !== null && gl._update !== undefined){
+              gl._update();
+          } else {
+              gl.update();
+          }
         }
     },
 
